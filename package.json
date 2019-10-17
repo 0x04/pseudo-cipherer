@@ -1,0 +1,48 @@
+{
+  "author": "Oliver Kühn <ok@0x04.de>",
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/0x04/string-mutilator/issues"
+  },
+  "dependencies": {
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-scripts": "^3.2.0"
+  },
+  "description": "Demonstration of the `string-mutilator` library.",
+  "devDependencies": {},
+  "directories": {
+    "lib": "lib"
+  },
+  "homepage": "https://github.com/0x04/string-mutilator#readme",
+  "keywords": [
+    "demo",
+    "string",
+    "mutilator"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "pseudo-cipherer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x04/string-mutilator.git"
+  },
+  "scripts": {
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
+  },
+  "version": "1.0.0"
+}
