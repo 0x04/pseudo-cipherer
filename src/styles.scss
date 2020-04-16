@@ -30,6 +30,7 @@
   --color-bg-0: #FFF;
   --color-bg-1: #EEE;
   --color-bg-2: #D0D0D0;
+  --color-bg-error: #C99;
   --color-border-0: #FFF;
   --color-border-1: #999;
   --color-text: #333;
@@ -382,6 +383,11 @@ input[type='submit']
       {
         text-align: left;
       }
+    }
+
+    input.invalid
+    {
+      background-color: var(--color-bg-error);
     }
   }
 }

@@ -395,7 +395,7 @@ class FunctionParamRenderer extends React.Component
     }
     this.setState({ valid });
 
-    valid && this.props.onChange
+    this.props.onChange
       && this.props.onChange(value);
   }
 
@@ -424,7 +424,6 @@ class FunctionParamRenderer extends React.Component
         />
         break;
 
-      // TODO: Fix entering of RegExps (valid/invalid)
       case 'regexp':
         renderer = <input
           type="text"

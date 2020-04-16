@@ -28,7 +28,7 @@ export default {
   ],
   'rockdotize': [
     { name: 'string', type: 'string' },
-    { name: 'regexp', type: 'regexp', default: '/\\w/gi' }
+    { name: 'regexp', type: 'regexp', default: /\w/gi }
   ],
   'rot13': [
     { name: 'string', type: 'string' }
