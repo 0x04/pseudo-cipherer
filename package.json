@@ -13,19 +13,19 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/0x04/string-mutilator/issues"
+    "url": "https://github.com/0x04/pseudo-cipherer/issues"
   },
   "dependencies": {
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "react-scripts": "^3.2.0"
+    "@0x04/string-mutilator": "file:../string-mutilator",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1"
   },
   "description": "Demonstration of the `string-mutilator` library.",
-  "devDependencies": {},
-  "directories": {
-    "lib": "lib"
+  "devDependencies": {
+    "node-sass": "^4.13.1"
   },
-  "homepage": "https://github.com/0x04/string-mutilator#readme",
+  "homepage": "https://github.com/0x04/pseudo-cipherer#readme",
   "keywords": [
     "demo",
     "string",
@@ -36,7 +36,7 @@
   "name": "pseudo-cipherer",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/0x04/string-mutilator.git"
+    "url": "git+https://github.com/0x04/pseudo-cipherer.git"
   },
   "scripts": {
     "build": "react-scripts build",
