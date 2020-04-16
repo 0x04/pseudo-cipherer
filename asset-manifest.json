@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/0x04/pseudo-ciphererstatic/css/main.749e82c1.chunk.css",
-    "main.js": "/0x04/pseudo-ciphererstatic/js/main.6eee2155.chunk.js",
-    "main.js.map": "/0x04/pseudo-ciphererstatic/js/main.6eee2155.chunk.js.map",
-    "runtime-main.js": "/0x04/pseudo-ciphererstatic/js/runtime-main.b80f53c0.js",
-    "runtime-main.js.map": "/0x04/pseudo-ciphererstatic/js/runtime-main.b80f53c0.js.map",
-    "static/js/2.3d8885a7.chunk.js": "/0x04/pseudo-ciphererstatic/js/2.3d8885a7.chunk.js",
-    "static/js/2.3d8885a7.chunk.js.map": "/0x04/pseudo-ciphererstatic/js/2.3d8885a7.chunk.js.map",
-    "index.html": "/0x04/pseudo-ciphererindex.html",
-    "precache-manifest.cd096e59675a1288628ff59e0a3b5345.js": "/0x04/pseudo-ciphererprecache-manifest.cd096e59675a1288628ff59e0a3b5345.js",
-    "service-worker.js": "/0x04/pseudo-ciphererservice-worker.js",
-    "static/css/main.749e82c1.chunk.css.map": "/0x04/pseudo-ciphererstatic/css/main.749e82c1.chunk.css.map",
-    "static/js/2.3d8885a7.chunk.js.LICENSE.txt": "/0x04/pseudo-ciphererstatic/js/2.3d8885a7.chunk.js.LICENSE.txt"
+    "main.css": "/pseudo-cipherer/static/css/main.749e82c1.chunk.css",
+    "main.js": "/pseudo-cipherer/static/js/main.6eee2155.chunk.js",
+    "main.js.map": "/pseudo-cipherer/static/js/main.6eee2155.chunk.js.map",
+    "runtime-main.js": "/pseudo-cipherer/static/js/runtime-main.dec82f97.js",
+    "runtime-main.js.map": "/pseudo-cipherer/static/js/runtime-main.dec82f97.js.map",
+    "static/js/2.3d8885a7.chunk.js": "/pseudo-cipherer/static/js/2.3d8885a7.chunk.js",
+    "static/js/2.3d8885a7.chunk.js.map": "/pseudo-cipherer/static/js/2.3d8885a7.chunk.js.map",
+    "index.html": "/pseudo-cipherer/index.html",
+    "precache-manifest.4d187125d19200a5d9fe7082d5643772.js": "/pseudo-cipherer/precache-manifest.4d187125d19200a5d9fe7082d5643772.js",
+    "service-worker.js": "/pseudo-cipherer/service-worker.js",
+    "static/css/main.749e82c1.chunk.css.map": "/pseudo-cipherer/static/css/main.749e82c1.chunk.css.map",
+    "static/js/2.3d8885a7.chunk.js.LICENSE.txt": "/pseudo-cipherer/static/js/2.3d8885a7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.b80f53c0.js",
+    "static/js/runtime-main.dec82f97.js",
     "static/js/2.3d8885a7.chunk.js",
     "static/css/main.749e82c1.chunk.css",
     "static/js/main.6eee2155.chunk.js"
