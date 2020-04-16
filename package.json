@@ -25,7 +25,7 @@
   "devDependencies": {
     "node-sass": "^4.13.1"
   },
-  "homepage": "https://github.com/0x04/pseudo-cipherer#readme",
+  "homepage": "https://0x04.github.io/pseudo-cipherer/",
   "keywords": [
     "demo",
     "string",
