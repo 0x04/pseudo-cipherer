@@ -15,7 +15,10 @@ class AppProvider extends React.Component
     definitions,
     definitionLabels: [ '', ...Object.keys(definitions) ],
 
-    setInput: (input) => this.setState({ input }),
+    setInput: (input) =>
+    {
+      this.state.handleChange(input, this.state.sequences.concat());
+    },
 
     getDefinition: (name) =>
     {
@@ -51,7 +54,7 @@ class AppProvider extends React.Component
 
       sequences.splice(index, 0, this.state.getSequenceDefaults(name));
 
-      this.setState({ sequences });
+      this.state.handleChange(this.state.input, sequences);
     },
 
     updateSequence: (index, name = '', args = []) =>
@@ -71,7 +74,7 @@ class AppProvider extends React.Component
 
       sequences.splice(index, 1, sequence);
 
-      this.setState({ sequences });
+      this.state.handleChange(this.state.input, sequences);
     },
 
     deleteSequence: (index) =>
@@ -85,7 +88,7 @@ class AppProvider extends React.Component
 
       sequences.splice(index, 1);
 
-      this.setState({ sequences });
+      this.state.handleChange(this.state.input, sequences);
     },
 
     clearSequences: () => {
@@ -101,14 +104,47 @@ class AppProvider extends React.Component
       return fn.apply(null, params);
     },
 
-    proceed: (index = this.state.sequences.length - 1) =>
+    handleChange: (input, sequences) =>
     {
-      return this.state.sequences.reduce(
-        (previous, current, currentIndex) => (current.name && index >= currentIndex)
-          ? this.state.execute(current.name, [ previous, ...current.args ])
-          : previous,
-          this.state.input
-      )
+      let output = '';
+      let previous;
+      let errorIndex = -1;
+
+      for (let i = 0; i < sequences.length; i++)
+      {
+        let current = sequences[i];
+
+        try
+        {
+          current.error = null;
+
+          if (errorIndex > -1 && errorIndex < i || !current.name)
+          {
+            current.output = '';
+          }
+          else
+          {
+            current.output = this.state.execute(
+              current.name,
+              [ previous?.output || input, ...current.args ]
+            );
+          }
+        }
+        catch (e)
+        {
+          current.output = '';
+          current.error = e.message;
+          errorIndex = i;
+        }
+
+        output = (errorIndex === -1)
+          ? current.output || output || input
+          : '';
+
+        previous = current;
+      }
+
+      this.setState({input, output, sequences});
     }
   }
 
@@ -203,7 +239,7 @@ const App = () => {
               {createFunctions(context)}
               <Output
                 label="Output"
-                value={context.proceed()}
+                value={context.output}
                 collapsable={false}
               />
             </>
@@ -253,7 +289,14 @@ const Function = (props) =>
                   ? <FunctionParams index={props.index} name={props.name}/>
                   : null
               }
-              <Output label="Output" value={context.proceed(props.index)} />
+              {
+                (context.sequences[props.index].error)
+                  ? <div className="error-container">
+                      {context.sequences[props.index].error}
+                    </div>
+                  : null
+              }
+              <Output label="Output" value={context.sequences[props.index].output} />
             </div>
             <div className="action-container">
               <button

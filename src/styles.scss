@@ -313,6 +313,13 @@ input[type='submit']
         margin: 0 0 0.25rem 0;
       }
 
+      > .error-container
+      {
+        padding: 0.25rem;
+        margin: 0 0 0.25rem 0;
+        background-color: var(--color-bg-error);
+      }
+
       > .output-component.collapsed .label
       {
         margin: 0;
