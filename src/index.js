@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import stringMutilator from '@0x04/string-mutilator';
-import definitions from './definitions';
+import definitions, { functionTypes } from './definitions';
 
 import './styles.scss';
 
@@ -45,29 +45,51 @@ class AppProvider extends React.Component
       error: null
     },
     definitions,
-    definitionLabels: [ '', ...Object.keys(definitions) ],
+    definitionGroups: [
+        'Involutory',
+        'Involutory with negated arguments',
+        'Involutory with counter function',
+        'Non involutory'
+      ].map(
+        (label, index) => [
+          label,
+          definitions
+            .filter((definition) => definition.type === index)
+            .map((definition) => definition.name)
+        ]
+      ),
 
     setInput: (input) => this.state.handleChange({ input }),
 
+    isDefinition: (name) =>
+    {
+      return this.state.definitions
+        .some((definition) => definition.name === name);
+    },
+
     getDefinition: (name) =>
     {
-      if (!(name in this.state.definitions))
+      let definition = this.state.definitions
+        .find((definition) => definition.name === name);
+
+      if (!definition)
       {
-        throw new TypeError(`Unknown definition '${name}'!`);
+        throw new TypeError(`Definition '${name}' not found!`);
       }
 
-      return this.state.definitions[name];
+      return definition;
     },
 
     getSequenceDefaults: (name = '') =>
     {
-      const definition = (name)
-        ? this.state.getDefinition(name)
-        : [];
+      let args = [];
 
-      let args = definition
-        .slice(1)
-        .map((arg) => arg.default);
+      if (name.length > 0)
+      {
+        args = this.state.getDefinition(name).args
+          .slice(1)
+          .map((arg) => arg.default);
+      }
 
       return { name, args };
     },
@@ -183,15 +205,15 @@ class AppProvider extends React.Component
       .map((value) =>
       {
         let [ name, ...args ] = value.split(/\s*,\s*/);
-        let definition = this.state.getDefinition(name).slice(1);
+        let definition = this.state.getDefinition(name).args.slice(1);
 
-        if (args.length !== definition.length)
+        if (args.length !== definition.args.length)
         {
           throw new TypeError(`Wrong number of arguments for '${name}'!`);
         }
 
         args = args.map(
-          (value, index) => getRealValue(value, definition[index].type)
+          (value, index) => getRealValue(value, definition.args[index].type)
         );
 
         return { name, args };
@@ -405,7 +427,7 @@ const Function = (props) =>
             <div className="function-container">
               <FunctionSelect index={props.index} name={props.name}/>
               {
-                (props.name in context.definitions && context.definitions[props.name].length > 1)
+                (context.isDefinition(props.name) && context.getDefinition(props.name).args.length > 1)
                   ? <FunctionParams index={props.index} name={props.name}/>
                   : null
               }
@@ -449,10 +471,20 @@ const FunctionSelect = (props) =>
             (context) => <select
               value={props.name}
               onChange={(event) => context.updateSequence(props.index, event.target.value)}>
+              <option value="" />
               {
-                context.definitionLabels.map(
-                  (label, index) => <option key={index} value={label}>{label}</option>
-                )
+                context.definitionGroups.map((group, groupIndex) =>
+                {
+                  const [ label, fns ] = group;
+
+                  return <optgroup key={groupIndex} label={label}>
+                    {
+                      fns.map(
+                        (fn, fnIndex) => <option key={fnIndex} value={fn}>{fn}</option>
+                      )
+                    }
+                  </optgroup>
+                })
               }
             </select>
           }
@@ -479,7 +511,7 @@ const FunctionParams = (props) =>
           {
             (context) => {
               const args = context.sequences[props.index].args
-              const lines = context.getDefinition(props.name).slice(1).map(
+              const lines = context.getDefinition(props.name).args.slice(1).map(
                 (property, index) => <tr key={index}>
                   <td>{property.name}</td>
                   <td>{property.type}</td>
