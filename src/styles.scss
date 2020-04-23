@@ -95,9 +95,23 @@ code
 .horizontal-container
 {
   display: flex;
-  width: 100%;
 }
 
+.vertical-container
+{
+  flex-grow: 1;
+
+  > *:not(:last-child)
+  {
+    margin: 0 0 0.25rem 0;
+  }
+}
+
+.error-container
+{
+  padding: 0.25rem;
+  background-color: var(--color-bg-error);
+}
 
 button.action-link
 {
@@ -193,19 +207,22 @@ input[type='submit']
   {
     background-color: var(--color-bg-1);
     border-radius: 0.25rem;
+    margin: 0 0 0.5rem 0;
     padding: 0.5rem;
   }
 }
 
 
-.input-component
+.input-component,
+.sequence-details-component
 {
   padding: 0.5rem;
   background-color: var(--color-bg-1);
   margin: 0 0 0.5rem 0;
   border-radius: 0.25rem;
 
-  label
+  label,
+  .label
   {
     flex-grow: 2;
     width: 100%;
@@ -218,15 +235,17 @@ input[type='submit']
   {
     flex-grow: 1;
     resize: vertical;
-    max-width: available;
+    width: 100%;
     min-height: 4.5rem;
     padding: 0.25rem;
     font-family: 'System Mono', monospace;
     font-size: 1rem;
     line-height: 1.25rem;
+    display: block;
   }
 
-  input[type='reset']
+  input[type='reset'],
+  button
   {
     flex-grow: 1;
     min-width: 4rem;
@@ -308,16 +327,9 @@ input[type='submit']
     > .function-container {
       flex-grow: 1;
 
-      > div:not(:last-child)
+      > *:not(:last-child)
       {
         margin: 0 0 0.25rem 0;
-      }
-
-      > .error-container
-      {
-        padding: 0.25rem;
-        margin: 0 0 0.25rem 0;
-        background-color: var(--color-bg-error);
       }
 
       > .output-component.collapsed .label
@@ -366,6 +378,7 @@ input[type='submit']
   }
 }
 
+
 .function-params-component
 {
   border-radius: 4px;
@@ -398,4 +411,3 @@ input[type='submit']
     }
   }
 }
-

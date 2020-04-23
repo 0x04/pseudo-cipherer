@@ -5,20 +5,49 @@ import definitions from './definitions';
 
 import './styles.scss';
 
-const AppContext = React.createContext();
+const getRealValue = (string, type = 'string') =>
+{
+  switch (type)
+  {
+    default:
+      return string;
+
+    case 'number':
+      let result = parseInt(string, 10);
+
+      if (isNaN(result))
+      {
+        throw new TypeError('Number is \'NaN\'!');
+      }
+      return result;
+
+    case 'boolean':
+      return /^(1|true|y(es)|on?)$/.test(string);
+
+    case 'regexp':
+      let source = string.slice(1, string.lastIndexOf(string[0]));
+      let flags = string.slice(string.lastIndexOf(string[0]) + 1);
+      return new RegExp(source, flags);
+  }
+};
+
+
+const AppContext = React.createContext({});
+
 
 class AppProvider extends React.Component
 {
   state = {
     input: '',
     sequences: [],
+    sequenceDetails: {
+      value: '',
+      error: null
+    },
     definitions,
     definitionLabels: [ '', ...Object.keys(definitions) ],
 
-    setInput: (input) =>
-    {
-      this.state.handleChange(input, this.state.sequences.concat());
-    },
+    setInput: (input) => this.state.handleChange({ input }),
 
     getDefinition: (name) =>
     {
@@ -43,6 +72,16 @@ class AppProvider extends React.Component
       return { name, args };
     },
 
+    getSequenceOutput: (sequences) =>
+    {
+      return sequences.reduce(
+        (previous, current) => (current.error === null && current.output)
+          ? current.output
+          : previous,
+        ''
+      )
+    },
+
     createSequence: (index = this.state.sequences.length, name = '') =>
     {
       if (index < 0 || index > this.state.sequences.length)
@@ -54,7 +93,7 @@ class AppProvider extends React.Component
 
       sequences.splice(index, 0, this.state.getSequenceDefaults(name));
 
-      this.state.handleChange(this.state.input, sequences);
+      this.state.handleChange({ sequences });
     },
 
     updateSequence: (index, name = '', args = []) =>
@@ -74,7 +113,7 @@ class AppProvider extends React.Component
 
       sequences.splice(index, 1, sequence);
 
-      this.state.handleChange(this.state.input, sequences);
+      this.state.handleChange({ sequences });
     },
 
     deleteSequence: (index) =>
@@ -88,12 +127,75 @@ class AppProvider extends React.Component
 
       sequences.splice(index, 1);
 
-      this.state.handleChange(this.state.input, sequences);
+      this.state.handleChange({ sequences });
     },
 
-    clearSequences: () => {
-      this.setState({ sequences: [] });
+    clearSequences: () => this.setState({ sequences: [] }),
+
+    getSequenceDetails: () => this.state.sequenceDetails.value,
+
+    setSequenceDetails: (string) => {
+      let sequences = [];
+      let sequenceDetails = { value: string, error: null };
+
+      try
+      {
+        if (string.length > 0)
+        {
+          sequences = this.state.parseSequenceDetails(string);
+        }
+      }
+      catch (e)
+      {
+        sequenceDetails.error = e.message;
+      }
+
+      this.state.proceed(this.state.input, sequences);
+
+      let output = this.state.getSequenceOutput(sequences) || this.state.input;
+
+      this.setState({ output, sequences, sequenceDetails });
     },
+
+    buildSequenceDetails: (sequences = this.state.sequences) => sequences
+      .map((sequence) =>
+      {
+        let result = [];
+
+        if (sequence.name)
+        {
+          result.push(sequence.name);
+
+          if (sequence.args.length > 0)
+          {
+            result.push(`,${sequence.args.join(',')}`);
+          }
+        }
+
+        return (result.length > 0)
+          ? result.join('')
+          : null;
+      })
+      .filter((value) => value !== null)
+      .join('|'),
+
+    parseSequenceDetails: (string) => string.split(/\s*\|\s*/)
+      .map((value) =>
+      {
+        let [ name, ...args ] = value.split(/\s*,\s*/);
+        let definition = this.state.getDefinition(name).slice(1);
+
+        if (args.length !== definition.length)
+        {
+          throw new TypeError(`Wrong number of arguments for '${name}'!`);
+        }
+
+        args = args.map(
+          (value, index) => getRealValue(value, definition[index].type)
+        );
+
+        return { name, args };
+      }),
 
     execute: (dotString, params) =>
     {
@@ -104,9 +206,8 @@ class AppProvider extends React.Component
       return fn.apply(null, params);
     },
 
-    handleChange: (input, sequences) =>
+    proceed: (input, sequences) =>
     {
-      let output = '';
       let previous;
       let errorIndex = -1;
 
@@ -118,7 +219,7 @@ class AppProvider extends React.Component
         {
           current.error = null;
 
-          if (errorIndex > -1 && errorIndex < i || !current.name)
+          if ((errorIndex > -1 && errorIndex < i) || !current.name)
           {
             current.output = '';
           }
@@ -137,14 +238,32 @@ class AppProvider extends React.Component
           errorIndex = i;
         }
 
-        output = (errorIndex === -1)
-          ? current.output || output || input
-          : '';
-
         previous = current;
       }
 
-      this.setState({input, output, sequences});
+      return sequences;
+    },
+
+    handleChange: ({
+      input = this.state.input,
+      sequences = this.state.sequences.concat(),
+      sequenceDetails = { ...this.state.sequenceDetails }
+    }) =>
+    {
+      this.state.proceed(input, sequences);
+
+      let output = this.state.getSequenceOutput(sequences) || input;
+
+      try
+      {
+        sequenceDetails.error = null;
+        sequenceDetails.value = this.state.buildSequenceDetails(sequences);
+      }
+      catch (e) {
+        sequenceDetails.error = e.message;
+      }
+
+      this.setState({ input, output, sequences, sequenceDetails });
     }
   }
 
@@ -242,6 +361,7 @@ const App = () => {
                 value={context.output}
                 collapsable={false}
               />
+              <SequenceDetails />
             </>
           )}
         </AppContext.Consumer>
@@ -397,32 +517,6 @@ class FunctionParamRenderer extends React.Component
     this.handleChange = this.handleChange.bind(this);
   }
 
-  getRealValue(value)
-  {
-    switch (this.props.type)
-    {
-      default:
-        return value;
-
-      case 'number':
-        let result = parseInt(value, 10);
-
-        if (isNaN(result))
-        {
-          throw new TypeError();
-        }
-        return result;
-
-      case 'boolean':
-        return /^(1|true|y(es)|on?)$/.test(value);
-
-      case 'regexp':
-        let source = value.slice(1, value.lastIndexOf(value[0]));
-        let flags = value.slice(value.lastIndexOf(value[0]) + 1);
-        return new RegExp(source, flags);
-    }
-  }
-
   handleChange(event)
   {
     let valid = true;
@@ -431,11 +525,12 @@ class FunctionParamRenderer extends React.Component
       : event.target.value;
 
     try {
-      value = this.getRealValue(value);
+      value = getRealValue(value, this.props.type);
     }
     catch (e) {
       valid = false;
     }
+
     this.setState({ valid });
 
     this.props.onChange
@@ -562,6 +657,45 @@ class CopyButton extends React.Component
         onClick={() => this.copyToClipboard(this.props.value)}>
         Copy
       </button>
+    );
+  }
+}
+
+
+class SequenceDetails extends React.Component
+{
+  state = {
+    orientation: false
+  }
+
+  render()
+  {
+    return (
+      <AppContext.Consumer>
+        {(context) => (
+          <div className="sequence-details-component">
+            <div className="label">Cipher-Sequence</div>
+            <div className="horizontal-container">
+              <div className="vertical-container">
+                <textarea
+                  value={context.getSequenceDetails()}
+                  onChange={(event) => context.setSequenceDetails(event.target.value)}
+                />
+                {
+                  (context.sequenceDetails.error)
+                    ? <div className="error-container">{context.sequenceDetails.error}</div>
+                    : null
+                }
+              </div>
+              <button
+                className="action action-invert"
+                onClick={() => alert('Not implemented yet!')}>
+                Invert
+              </button>
+            </div>
+          </div>
+        )}
+      </AppContext.Consumer>
     );
   }
 }
