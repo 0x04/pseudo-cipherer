@@ -1,3 +1,11 @@
+$color-blue: #00F;
+$color-cyan: #0FF;
+$color-green: #0F0;
+$color-magenta: #F0F;
+$color-red: #F00;
+$color-yellow: #FF0;
+
+
 @font-face {
   font-family: 'System Serif';
   src:
@@ -30,12 +38,23 @@
   --color-bg-0: #FFF;
   --color-bg-1: #EEE;
   --color-bg-2: #D0D0D0;
-  --color-bg-error: #C99;
   --color-border-0: #FFF;
   --color-border-1: #999;
   --color-text: #333;
-  --color-link: #33A;
-  --color-focus: #33A;
+
+  --color-bright-blue:    #{lighten($color-blue, 20%)};
+  --color-bright-cyan:    #{lighten($color-cyan, 20%)};
+  --color-bright-green:   #{lighten($color-green, 20%)};
+  --color-bright-magenta: #{lighten($color-magenta, 20%)};
+  --color-bright-red:     #{lighten($color-red, 20%)};
+  --color-bright-yellow:  #{lighten($color-yellow, 20%)};
+
+  --color-blue:    #{darken($color-blue, 20%)};
+  --color-cyan:    #{darken($color-cyan, 20%)};
+  --color-green:   #{darken($color-green, 20%)};
+  --color-magenta: #{darken($color-magenta, 20%)};
+  --color-red:     #{darken($color-red, 20%)};
+  --color-yellow:  #{darken($color-yellow, 20%)};
 }
 
 html,
@@ -71,17 +90,17 @@ body
 :focus
 {
   outline: 0;
-  box-shadow: 0 0 3px var(--color-focus);
+  box-shadow: 0 0 3px var(--color-bright-blue);
 }
 
 a
 {
-  color: var(--color-link);
+  color: var(--color-bright-blue);
 
   &:link,
   &:visited
   {
-    color: var(--color-link);
+    color: var(--color-bright-blue);
   }
 }
 
@@ -110,7 +129,7 @@ code
 .error-container
 {
   padding: 0.25rem;
-  background-color: var(--color-bg-error);
+  background-color: var(--color-bright-red);
 }
 
 button.action-link
@@ -315,6 +334,7 @@ input[type='submit']
   }
 }
 
+
 .function-component
 {
   background-color: var(--color-bg-1);
@@ -352,6 +372,27 @@ input[type='submit']
       }
     }
   }
+}
+
+
+.function-type-0
+{
+  background-color: var(--color-bright-green);
+}
+
+.function-type-1
+{
+  background-color: var(--color-bright-cyan);
+}
+
+.function-type-2
+{
+  background-color: var(--color-bright-yellow);
+}
+
+.function-type-3
+{
+  background-color: var(--color-bright-red);
 }
 
 
@@ -396,7 +437,7 @@ input[type='submit']
       border: 1px solid var(--color-bg-2);
       text-align: center;
       padding: 4px 8px;
-      background-color: #FFF;
+      background-color: rgba(255, 255, 255, 0.5);
       width: 100%;
 
       &:first-child
@@ -407,7 +448,7 @@ input[type='submit']
 
     input.invalid
     {
-      background-color: var(--color-bg-error);
+      background-color: var(--color-bright-red);
     }
   }
 }

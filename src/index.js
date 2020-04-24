@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import clsx from 'clsx';
+
 import stringMutilator from '@0x04/string-mutilator';
 import definitions, { functionTypes } from './definitions';
 
@@ -330,6 +333,13 @@ const App = () => {
         key={index}
         index={index}
         name={sequence.name}
+        definition={(context.isDefinition(sequence.name))
+          ? context.getDefinition(sequence.name)
+          : {}
+        }
+        sequence={context.sequences[index]}
+        onRemoveClick={() => context.deleteSequence(index)}
+        onAddClick={() => context.createSequence(index + 1)}
       />
     )
 
@@ -420,41 +430,37 @@ function Input(props)
 const Function = (props) =>
 {
   return (
-    <div className="function-component">
-      <AppContext.Consumer>
-        {(context) => (
-          <div className="horizontal-container">
-            <div className="function-container">
-              <FunctionSelect index={props.index} name={props.name}/>
-              {
-                (context.isDefinition(props.name) && context.getDefinition(props.name).args.length > 1)
-                  ? <FunctionParams index={props.index} name={props.name}/>
-                  : null
-              }
-              {
-                (context.sequences[props.index].error)
-                  ? <div className="error-container">
-                      {context.sequences[props.index].error}
-                    </div>
-                  : null
-              }
-              <Output label="Output" value={context.sequences[props.index].output} />
-            </div>
-            <div className="action-container">
-              <button
-                className="action action-delete"
-                onClick={() => context.deleteSequence(props.index)}>
-                Remove Function
-              </button>
-              <button
-                className="action action-create"
-                onClick={() => context.createSequence(props.index + 1)}>
-                Add Function
-              </button>
-            </div>
-          </div>
-        )}
-      </AppContext.Consumer>
+    <div className={clsx('function-component', (props.definition.type !== undefined) && `function-type-${props.definition.type}`)}>
+      <div className="horizontal-container">
+        <div className="vertical-container">
+          <FunctionSelect index={props.index} name={props.name}/>
+          {
+            (props.definition.args?.length > 1)
+              ? <FunctionParams index={props.index} name={props.name}/>
+              : null
+          }
+          {
+            (props.sequence.error)
+              ? <div className="error-container">
+                  {props.sequence.error}
+                </div>
+              : null
+          }
+          <Output label="Output" value={props.sequence.output} />
+        </div>
+        <div className="action-container">
+          <button
+            className="action action-delete"
+            onClick={() => props.onRemoveClick?.()}>
+            Remove Function
+          </button>
+          <button
+            className="action action-create"
+            onClick={() => props.onAddClick?.()}>
+            Add Function
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -477,13 +483,18 @@ const FunctionSelect = (props) =>
                 {
                   const [ label, fns ] = group;
 
-                  return <optgroup key={groupIndex} label={label}>
-                    {
-                      fns.map(
-                        (fn, fnIndex) => <option key={fnIndex} value={fn}>{fn}</option>
-                      )
-                    }
-                  </optgroup>
+                  return (
+                    <optgroup
+                      className={`function-type-${groupIndex}`}
+                      key={groupIndex}
+                      label={label}>
+                      {
+                        fns.map(
+                          (fn, fnIndex) => <option key={fnIndex} value={fn}>{fn}</option>
+                        )
+                      }
+                    </optgroup>
+                  );
                 })
               }
             </select>
@@ -498,7 +509,7 @@ const FunctionSelect = (props) =>
 const FunctionParams = (props) =>
 {
   return (
-    <div className="function-params-component">
+    <div className='function-params-component'>
       <table className="function-params">
         <thead>
           <tr>
@@ -627,7 +638,7 @@ class Output extends React.Component
   {
     return (
       <div
-        className={'output-component' + (this.props.collapsable && this.state.collapsed ? ' collapsed' : '')}>
+        className={clsx('output-component', (this.props.collapsable && this.state.collapsed) && ' collapsed')}>
         <div className="label">
           {
             (this.props.collapsable)
