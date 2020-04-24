@@ -24,6 +24,7 @@
   },
   "description": "Demonstration of the `string-mutilator` library.",
   "devDependencies": {
+    "gh-pages": "^2.2.0",
     "node-sass": "^4.13.1"
   },
   "homepage": "https://0x04.github.io/pseudo-cipherer/",
