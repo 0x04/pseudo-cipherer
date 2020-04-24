@@ -205,15 +205,15 @@ class AppProvider extends React.Component
       .map((value) =>
       {
         let [ name, ...args ] = value.split(/\s*,\s*/);
-        let definition = this.state.getDefinition(name).args.slice(1);
+        let definitionArgs = this.state.getDefinition(name).args.slice(1);
 
-        if (args.length !== definition.args.length)
+        if (args.length !== definitionArgs.length)
         {
           throw new TypeError(`Wrong number of arguments for '${name}'!`);
         }
 
         args = args.map(
-          (value, index) => getRealValue(value, definition.args[index].type)
+          (value, index) => getRealValue(value, definitionArgs[index].type)
         );
 
         return { name, args };
