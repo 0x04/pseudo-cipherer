@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e0d4ba18efe3e2c5edd80e7fcc46ee02",
+    "revision": "65b8558c7e3119a4ddf144f4d26ceaf3",
     "url": "/pseudo-cipherer/index.html"
   },
   {
-    "revision": "307da89c8f546a7498fe",
+    "revision": "b79d7bc648d6b84feaed",
     "url": "/pseudo-cipherer/static/css/main.dec93e5b.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/pseudo-cipherer/static/js/2.c997cfe8.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "307da89c8f546a7498fe",
-    "url": "/pseudo-cipherer/static/js/main.46023c84.chunk.js"
+    "revision": "b79d7bc648d6b84feaed",
+    "url": "/pseudo-cipherer/static/js/main.438b771e.chunk.js"
   },
   {
     "revision": "2fbdc37902fe2d93fe29",
