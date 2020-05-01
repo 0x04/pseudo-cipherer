@@ -312,7 +312,6 @@ input[type='submit']
   .output
   {
     flex-grow: 1;
-    width: available;
     font-family: 'System Mono', monospace;
     font-size: 1rem;
     line-height: 1.25rem;
@@ -321,7 +320,9 @@ input[type='submit']
     padding: 0.25rem;
     background-color: var(--color-bg-2);
     white-space: normal;
+    overflow-wrap: break-word;
     word-wrap: break-word;
+    word-break: break-all;
     overflow: auto;
   }
 
