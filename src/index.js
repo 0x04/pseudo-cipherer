@@ -42,6 +42,7 @@ class AppProvider extends React.Component
 {
   state = {
     input: '',
+    output: '',
     sequences: [],
     sequenceDetails: {
       value: '',
@@ -157,7 +158,51 @@ class AppProvider extends React.Component
 
     clearSequences: () => this.setState({ sequences: [] }),
 
-    getSequenceDetails: () => this.state.sequenceDetails.value,
+    invertSequences: () =>
+    {
+      let sequences = [];
+
+      this.state.sequences.forEach((sequence) => {
+        let definition = this.state.getDefinition(sequence.name);
+
+        switch (definition.type)
+        {
+          default:
+            sequences.unshift({ name: '', args: [] });
+            break;
+
+          case functionTypes.involutory:
+            sequences.unshift({ name: sequence.name, args: [] });
+            break;
+
+          case functionTypes.involutoryNegatedArgs:
+            sequences.unshift({
+              name: sequence.name,
+              args: sequence.args.map((arg) => arg * -1)
+            });
+            break;
+
+          case functionTypes.involutoryCounterFn:
+            // TODO: How to handle arguments?
+            sequences.unshift({
+              name: definition.counterFn,
+              args: []
+            });
+            break;
+
+          case functionTypes.nonInvolutory:
+            sequences.unshift({
+              name: sequence.name,
+              args: sequence.args.concat(),
+              // TODO: The error is overwritten in `proceed`
+              error: 'This function is not invertible!'
+            });
+            break;
+        }
+      });
+
+      this.state.handleChange({ input: this.state.output, sequences });
+    },
 
     setSequenceDetails: (string) => {
       let sequences = [];
@@ -717,25 +762,26 @@ class SequenceDetails extends React.Component
       <AppContext.Consumer>
         {(context) => (
           <div className="sequence-details-component">
-            <div className="label">Cipher-Sequence</div>
-            <div className="horizontal-container">
-              <div className="vertical-container">
-                <textarea
-                  value={context.getSequenceDetails()}
-                  onChange={(event) => context.setSequenceDetails(event.target.value)}
-                />
-                {
-                  (context.sequenceDetails.error)
-                    ? <div className="error-container">{context.sequenceDetails.error}</div>
-                    : null
-                }
+            <label className="label" htmlFor="cipher-sequence">Cipher/Decipher-Sequence</label>
+            <div className="vertical-container">
+              <textarea
+                id="cipher-sequence"
+                className="output"
+                value={context.sequenceDetails.value}
+                onChange={(event) => context.setsequenceDetails(event.target.value)}
+              />
+              {
+                (context.sequenceDetails.error)
+                  ? <div className="error-container">{context.sequenceDetails.error}</div>
+                  : null
+              }
               </div>
-              <button
-                className="action action-invert"
-                onClick={() => alert('Not implemented yet!')}>
-                Invert
-              </button>
-            </div>
+            <CopyButton value={context.sequenceDetails.value} />
+            <button
+              className="action action-invert"
+              onClick={() => context.invertSequences()}>
+              Invert
+            </button>
           </div>
         )}
       </AppContext.Consumer>
