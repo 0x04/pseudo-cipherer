@@ -46,6 +46,13 @@ const definitions = [
     ]
   },
   {
+    name: 'gobbledygook',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
     name: 'jumble',
     type: functionTypes.nonInvolutory,
     args: [
@@ -111,6 +118,22 @@ const definitions = [
     args: [
       { name: 'string', type: 'string' },
       { name: 'type', type: 'number', default: 0, min: 0, max: 12 }
+    ]
+  },
+  {
+    name: 'unicode.fixSurrogates',
+    type: functionTypes.involutoryCounterFn,
+    counterFn: 'unicode.unfixSurrogates',
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
+    name: 'unicode.unfixSurrogates',
+    type: functionTypes.involutoryCounterFn,
+    counterFn: 'unicode.fixSurrogates',
+    args: [
+      { name: 'string', type: 'string' }
     ]
   }
 ];
