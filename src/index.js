@@ -44,7 +44,7 @@ class AppProvider extends React.Component
     input: '',
     output: '',
     sequences: [],
-    sequenceDetails: {
+    sequenceString: {
       value: '',
       error: null
     },
@@ -204,30 +204,30 @@ class AppProvider extends React.Component
       this.state.handleChange({ input: this.state.output, sequences });
     },
 
-    setSequenceDetails: (string) => {
+    setSequenceString: (string) => {
       let sequences = [];
-      let sequenceDetails = { value: string, error: null };
+      let sequenceString = { value: string, error: null };
 
       try
       {
         if (string.length > 0)
         {
-          sequences = this.state.parseSequenceDetails(string);
+          sequences = this.state.parseSequenceString(string);
         }
       }
       catch (e)
       {
-        sequenceDetails.error = e.message;
+        sequenceString.error = e.message;
       }
 
       this.state.proceed(this.state.input, sequences);
 
       let output = this.state.getSequenceOutput(sequences) || this.state.input;
 
-      this.setState({ output, sequences, sequenceDetails });
+      this.setState({ output, sequences, sequenceString });
     },
 
-    buildSequenceDetails: (sequences = this.state.sequences) => sequences
+    buildSequenceString: (sequences = this.state.sequences) => sequences
       .map((sequence) =>
       {
         let result = [];
@@ -249,7 +249,7 @@ class AppProvider extends React.Component
       .filter((value) => value !== null)
       .join('|'),
 
-    parseSequenceDetails: (string) => string.split(/\s*\|\s*/)
+    parseSequenceString: (string) => string.split(/\s*\|\s*/)
       .map((value) =>
       {
         let [ name, ...args ] = value.split(/\s*,\s*/);
@@ -317,7 +317,7 @@ class AppProvider extends React.Component
     handleChange: ({
       input = this.state.input,
       sequences = this.state.sequences.concat(),
-      sequenceDetails = { ...this.state.sequenceDetails }
+      sequenceString = { ...this.state.sequenceString }
     }) =>
     {
       this.state.proceed(input, sequences);
@@ -326,14 +326,14 @@ class AppProvider extends React.Component
 
       try
       {
-        sequenceDetails.error = null;
-        sequenceDetails.value = this.state.buildSequenceDetails(sequences);
+        sequenceString.error = null;
+        sequenceString.value = this.state.buildSequenceString(sequences);
       }
       catch (e) {
-        sequenceDetails.error = e.message;
+        sequenceString.error = e.message;
       }
 
-      this.setState({ input, output, sequences, sequenceDetails });
+      this.setState({ input, output, sequences, sequenceString });
     }
   }
 
@@ -438,7 +438,7 @@ const App = () => {
                 value={context.output}
                 collapsable={false}
               />
-              <SequenceDetails />
+              <SequenceString />
             </>
           )}
         </AppContext.Consumer>
@@ -750,7 +750,7 @@ class CopyButton extends React.Component
 }
 
 
-class SequenceDetails extends React.Component
+class SequenceString extends React.Component
 {
   state = {
     orientation: false
@@ -761,22 +761,22 @@ class SequenceDetails extends React.Component
     return (
       <AppContext.Consumer>
         {(context) => (
-          <div className="sequence-details-component">
+          <div className="sequence-string-component">
             <label className="label" htmlFor="cipher-sequence">Cipher/Decipher-Sequence</label>
             <div className="vertical-container">
               <textarea
                 id="cipher-sequence"
                 className="output"
-                value={context.sequenceDetails.value}
-                onChange={(event) => context.setsequenceDetails(event.target.value)}
+                value={context.sequenceString.value}
+                onChange={(event) => context.setSequenceString(event.target.value)}
               />
               {
-                (context.sequenceDetails.error)
-                  ? <div className="error-container">{context.sequenceDetails.error}</div>
+                (context.sequenceString.error)
+                  ? <div className="error-container">{context.sequenceString.error}</div>
                   : null
               }
               </div>
-            <CopyButton value={context.sequenceDetails.value} />
+            <CopyButton value={context.sequenceString.value} />
             <button
               className="action action-invert"
               onClick={() => context.invertSequences()}>
