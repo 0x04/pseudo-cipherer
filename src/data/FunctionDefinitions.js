@@ -1,3 +1,7 @@
+/**
+ * The available function types.
+ * @type {object}
+ */
 const functionTypes = {
   involutory: 0,
   involutoryNegatedArgs: 1,
@@ -5,7 +9,11 @@ const functionTypes = {
   nonInvolutory: 3
 };
 
-const definitions = [
+/**
+ * The function definitions.
+ * @type {array}
+ */
+const functions = [
   {
     name: 'charCase.invert',
     type: functionTypes.involutoryNegatedArgs,
@@ -138,9 +146,75 @@ const definitions = [
   }
 ];
 
-export default definitions;
+/**
+ * A 2D array containing the functions ordered by their type.
+ * @type {[string, (string)[]][]}
+ */
+const functionGroups = [
+    'Involutory',
+    'Involutory with negated arguments',
+    'Involutory with counter function',
+    'Non involutory'
+  ].map(
+    (label, index) => [
+      label,
+      functions
+        .filter(definition => definition.type === index)
+        .map(definition => definition.name)
+    ]
+  );
 
-export
+/**
+ * Get a definition by name.
+ * @param {string} name
+ * @return {object}
+ * @throws {TypeError}
+ */
+const get = name =>
 {
-  functionTypes
+  let definition = functions.find(definition => definition.name === name);
+
+  if (!definition)
+  {
+    throw new TypeError(`Definition '${name}' not found!`);
+  }
+
+  return definition;
+}
+
+/**
+ * Check if given definition `name` exists.
+ * @param {string} name
+ * @return {boolean}
+ */
+const exist = name => functions
+  .some(definition => definition.name === name)
+
+/**
+ * Get the default arguments of a function definition.
+ * @param name
+ * @return {array}
+ */
+const getArgs = name => exist(name)
+  ? get(name).args
+      .slice(1)
+      .map(arg => arg.default)
+  : [];
+
+export default {
+  functions,
+  functionTypes,
+  functionGroups,
+  get,
+  exist,
+  getArgs
+};
+
+export {
+  functions,
+  functionTypes,
+  functionGroups,
+  get,
+  exist,
+  getArgs
 };

@@ -206,26 +206,10 @@ input[type='submit']
       margin: 0 0 0.25rem 0;
     }
   }
+}
 
-  > .action-container
-  {
-    background-color: var(--color-bg-1);
-    padding: 0.5rem;
-    margin: 0 0 0.5rem 0;
-    border-radius: 0.25rem;
-    display: flex;
-
-    > .spacer
-    {
-      flex-grow: 1;
-    }
-
-    .action
-    {
-      margin-left: 0.25rem;
-    }
-  }
-
+.content-component
+{
   > .output-component
   {
     background-color: var(--color-bg-1);
@@ -234,7 +218,6 @@ input[type='submit']
     padding: 0.5rem;
   }
 }
-
 
 .input-component
 {
@@ -337,6 +320,27 @@ input[type='submit']
   }
 }
 
+.function-list-component
+{
+  > .action-container
+  {
+    background-color: var(--color-bg-1);
+    padding: 0.5rem;
+    margin: 0 0 0.5rem 0;
+    border-radius: 0.25rem;
+    display: flex;
+
+    > .spacer
+    {
+      flex-grow: 1;
+    }
+
+    .action
+    {
+      margin-left: 0.25rem;
+    }
+  }
+}
 
 .function-component
 {
