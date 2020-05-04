@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import CopyButton from './CopyButton';
 
 
-const Output = ({ label, value, collapsable = true }) =>
+const Output = ({ label, value, collapsable = true, showLength = true }) =>
 {
   const [ collapsed, setCollapsed ] = useState(true);
 
@@ -13,13 +13,17 @@ const Output = ({ label, value, collapsable = true }) =>
       className={clsx('output-component', (collapsable && collapsed) && ' collapsed')}>
       <div className="label">
         {
-          (collapsable)
+          (!!label) && (collapsable)
             ? <button
               className="action-link"
               onClick={() => setCollapsed(!collapsed)}>
               {label}
             </button>
             : <span>{label}</span>
+        }
+        {
+          (!!label && showLength)
+            && <span className="length">{`(${value?.length || 0})`}</span>
         }
       </div>
       <div

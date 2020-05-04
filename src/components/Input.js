@@ -1,14 +1,20 @@
 import React from 'react';
 
 
-const Input = props => (
+const Input = ({ label, value, showLength = true, ...props }) => (
   <div className="input-component">
-    <label htmlFor={props.id}>{props.label}</label>
+    <label htmlFor={props.id}>
+      {label}
+      {
+        (showLength)
+        && <span className="length">{`(${value?.length || 0})`}</span>
+      }
+    </label>
     <div className="horizontal-container">
       <textarea
         id={props.id}
         className="input"
-        value={props.value}
+        value={value}
         onChange={props.onChange}
         placeholder="Please enter text&hellip;"
       />
