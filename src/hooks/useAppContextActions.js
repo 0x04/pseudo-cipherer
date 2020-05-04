@@ -16,13 +16,14 @@ const useAppContextActions = () =>
 
   const handleChange = ({
     input = state.input,
+    output = null,
     functions = state.functions,
     sequence = state.sequence
   }) =>
   {
     proceed(input, functions);
 
-    let output = getSequenceOutput(functions) || input;
+    output = output || getSequenceOutput(functions) || input;
 
     try
     {
@@ -120,7 +121,7 @@ const useAppContextActions = () =>
         })
         .reverse();
 
-      handleChange({ functions });
+      handleChange({ input: state.output, output: state.input, functions });
     },
 
     setInputString(input)
