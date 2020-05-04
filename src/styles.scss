@@ -115,6 +115,14 @@ pre
   margin: 0;
 }
 
+textarea
+{
+  font-family: 'System Mono', monospace;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  display: block;
+}
+
 .horizontal-container
 {
   display: flex;
@@ -129,6 +137,25 @@ pre
     margin: 0 0 0.25rem 0;
   }
 }
+
+.action-container
+{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  .spacer
+  {
+    flex-grow: 1;
+  }
+
+  .action
+  {
+    margin-left: 0.25rem;
+    white-space: pre;
+  }
+}
+
 
 .error-container
 {
@@ -243,10 +270,6 @@ input[type='submit']
     width: 100%;
     min-height: 4.5rem;
     padding: 0.25rem;
-    font-family: 'System Mono', monospace;
-    font-size: 1rem;
-    line-height: 1.25rem;
-    display: block;
   }
 
   input[type='reset'],
@@ -339,17 +362,6 @@ input[type='submit']
     padding: 0.5rem;
     margin: 0 0 0.5rem 0;
     border-radius: 0.25rem;
-    display: flex;
-
-    > .spacer
-    {
-      flex-grow: 1;
-    }
-
-    .action
-    {
-      margin-left: 0.25rem;
-    }
   }
 }
 
@@ -387,20 +399,6 @@ input[type='submit']
       > .output-component.collapsed .label
       {
         margin: 0;
-      }
-    }
-
-    > .action-container
-    {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      margin-left: 0.25rem;
-
-      .action
-      {
-        margin-left: 0.25rem;
-        white-space: pre;
       }
     }
   }
@@ -494,12 +492,12 @@ input[type='submit']
 
   display: grid;
   grid-gap: 0.25rem;
-  grid-template-columns: auto 4rem 4rem;
+  grid-template-columns: auto 4rem 4rem 4rem;
 
   label,
   .label
   {
-    grid-column: 1 / span 3;
+    grid-column: 1 / span 4;
 
     font-weight: bolder;
     display: block;
@@ -539,9 +537,106 @@ input[type='submit']
     grid-column: 2;
   }
 
-  .action-invert
+  .action-copy-cipher-string
   {
+    background: var(--color-bright-green);
     grid-row: 2 / 3;
     grid-column: 3;
   }
+
+  .action-invert
+  {
+    grid-row: 2 / 3;
+    grid-column: 4;
+  }
+}
+
+.modal-component
+{
+  //pointer-events: none;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &.visible
+  {
+    display: flex;
+  }
+
+  > .modal-content
+  {
+    margin: auto;
+  }
+
+  .action-close
+  {
+    appearance: none;
+    background: none;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    width: 2rem;
+    height: 2rem;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+
+    &::before,
+    &::after
+    {
+      content: '';
+      display: block;
+      background: black;
+      width: 0.2rem;
+      height: 2rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0 0;
+    }
+
+    &::before
+    {
+      transform: rotate(-45deg) translate(-50%, -50%);
+    }
+
+    &::after
+    {
+      transform: rotate(45deg) translate(-50%, -50%);
+    }
+  }
+}
+
+.decipherer-component
+{
+  padding: 0.5rem;
+  background: var(--color-bg-0);
+  border: 0.5rem solid var(--color-bg-1);
+
+  max-width: 50vw;
+  min-width: 40rem;
+
+  > .input
+  {
+    display: block;
+    margin: 0 0 0.25rem 0;
+    width: 100%;
+    max-height: 40vw;
+    min-height: 30rem;
+    resize: vertical;
+  }
+
+  > .error-container
+  {
+    margin: 0 0 0.25rem 0;
+  }
+
 }

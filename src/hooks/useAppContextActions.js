@@ -2,6 +2,8 @@ import { useAppContext } from '../data/AppContext';
 
 import FunctionDefinitions, {functionTypes} from '../data/FunctionDefinitions';
 
+import stringMutilator from '@0x04/string-mutilator';
+
 import {
   buildSequenceString,
   getSequenceOutput,
@@ -161,6 +163,31 @@ const useAppContextActions = () =>
 
       setState({ output, functions, sequence });
     },
+
+    decipherCipherString(string)
+    {
+      const containsDecipher = /(.*)\u2404([\u0020-\uFFFF]+)$/m;
+
+      if (!containsDecipher.test(string))
+      {
+        throw new TypeError(`String doesn't contain a decipher sequence!`);
+      }
+
+      let [ , input, sequence ] = string.match(containsDecipher);
+
+      sequence = stringMutilator.compressor.unpack(sequence);
+
+      let functions = parseSequenceString(sequence);
+
+      proceed(input, functions);
+
+      return getSequenceOutput(functions);
+    },
+
+    createCipherString(input = '', sequenceString = '')
+    {
+      return `${input}\u2404${stringMutilator.compressor.pack(sequenceString)}`;
+    }
   };
 };
 

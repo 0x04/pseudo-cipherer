@@ -10,7 +10,16 @@ const Sequence = ({ showLength = true }) =>
 {
   const [ state ] = useAppContext();
   const { value, error } = state.sequence;
-  const { setSequenceString, invertFunctions } = useAppContextActions();
+  const {
+    setSequenceString,
+    invertFunctions,
+    createCipherString
+  } = useAppContextActions();
+
+  function copyCipheredStringFn(sequence)
+  {
+    return createCipherString(state.input, sequence);
+  }
 
   return (
     <div className="sequence-component">
@@ -35,7 +44,13 @@ const Sequence = ({ showLength = true }) =>
             && <div className="error-container">{error}</div>
         }
       </div>
-      <CopyButton value={value}/>
+      <CopyButton value={value} />
+      <CopyButton
+        label="Copy Cipher String"
+        value={value}
+        function={copyCipheredStringFn}
+        className="action-copy-cipher-string"
+      />
       <button
         className="action action-invert"
         onClick={() => invertFunctions()}>

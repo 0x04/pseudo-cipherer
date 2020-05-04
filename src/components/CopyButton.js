@@ -1,9 +1,13 @@
 import React from 'react';
+import clsx from 'clsx';
 
 class CopyButton extends React.Component
 {
   static defaultProps = {
-    value: ''
+    label: 'Copy',
+    value: '',
+    className: null,
+    function: null,
   }
 
   copyToClipboard(text)
@@ -28,11 +32,20 @@ class CopyButton extends React.Component
 
   render()
   {
+    const handleClick = () =>
+    {
+      if (typeof this.props.function === 'function')
+      {
+        this.copyToClipboard(this.props.function(this.props.value));
+      }
+      else this.copyToClipboard(this.props.value)
+    };
+
     return (
       <button
-        className="action action-copy"
-        onClick={() => this.copyToClipboard(this.props.value)}>
-        Copy
+        className={clsx('action', 'action-copy', this.props.className)}
+        onClick={handleClick}>
+        {this.props.label}
       </button>
     );
   }

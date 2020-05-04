@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { blindText } from '../constants';
 
 import useAppContextActions from '../hooks/useAppContextActions';
 
+import Modal from './Modal';
+import Decipherer from './Decipherer';
 
 const Header = () =>
 {
   const { setInputString } = useAppContextActions();
+
+  const [ modalVisible, setModalVisible ] = useState(false);
 
   return (
     <div className="header-component">
@@ -28,7 +32,20 @@ const Header = () =>
           blind text
         </button> and add a function to see the result in the output pane.
         </p>
+        <p>If you just want to decipher a message you received,
+          click <button
+            className="action-link"
+            onClick={() => setModalVisible(!modalVisible)}>
+            here
+          </button>!
+
+        </p>
       </div>
+      <Modal
+        visible={modalVisible}
+        onVisibilityChange={(value) => setModalVisible(value)}>
+        <Decipherer onCancelClick={() => setModalVisible(false)} />
+      </Modal>
     </div>
   );
 };
