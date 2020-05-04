@@ -89,7 +89,7 @@ const buildSequenceString = sequences => sequences
   {
     let result = [];
 
-    if (sequence.name)
+    if (sequence.name && sequence.enabled)
     {
       result.push(sequence.name);
 
