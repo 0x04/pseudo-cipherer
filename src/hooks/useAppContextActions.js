@@ -41,15 +41,16 @@ const useAppContextActions = () =>
     createFunction({
       index = state.functions.length,
       name = '',
-      args = FunctionDefinitions.getArgs(name)
+      args = FunctionDefinitions.getArgs(name),
+      enabled = true
     })
     {
       let functions = [ ...state.functions ];
-      functions.splice(index, 0, { name, args });
+      functions.splice(index, 0, { name, args, enabled });
       handleChange({ functions });
     },
 
-    updateFunction({ index, name, args })
+    updateFunction({ index, name, args, enabled = true })
     {
       let functions = [ ...state.functions ];
       let fn = functions[index];
@@ -60,13 +61,15 @@ const useAppContextActions = () =>
       }
       else args = args ?? fn.args;
 
-      functions.splice(index, 1, { name: name ?? fn.name, args });
+      functions.splice(index, 1, { name: name ?? fn.name, args, enabled });
+
       handleChange({ functions });
     },
 
     deleteFunction({ index })
     {
       let functions = state.functions.filter((_, i) => index !== i);
+
       handleChange({ functions });
     },
 
@@ -77,40 +80,43 @@ const useAppContextActions = () =>
 
     invertFunctions()
     {
-      let functions = state.functions.map(fn =>
-      {
-        let definition = FunctionDefinitions.exist(fn.name)
-          ? FunctionDefinitions.get(fn.name)
-          : {};
-
-        switch (definition.type)
+      let functions = state.functions
+        .map(fn =>
         {
-          default:
-            return { name: '', args: [] };
+          let definition = FunctionDefinitions.exist(fn.name)
+            ? FunctionDefinitions.get(fn.name)
+            : {};
 
-          case functionTypes.involutory:
-            return { name: fn.name, args: [] };
+          switch (definition.type)
+          {
+            default:
+              return { name: '', args: [], enabled: fn.enabled };
 
-          case functionTypes.involutoryNegatedArgs:
-            return {
-              name: fn.name,
-              args: fn.args.map(arg => arg * -1)
-            };
+            case functionTypes.involutory:
+              return { name: fn.name, args: [], enabled: fn.enabled };
 
-          case functionTypes.involutoryCounterFn:
-            // TODO: How to handle arguments?
-            return {
-              name: definition.counterFn,
-              args: []
-            };
+            case functionTypes.involutoryNegatedArgs:
+              return {
+                name: fn.name,
+                args: fn.args.map(arg => arg * -1),
+                enabled: fn.enabled
+              };
 
-          case functionTypes.nonInvolutory:
-            return {
-              name: fn.name,
-              args: fn.args.concat()
-            };
-        }
-      })
+            case functionTypes.involutoryCounterFn:
+              // TODO: How to handle arguments?
+              return {
+                name: definition.counterFn,
+                args: []
+              };
+
+            case functionTypes.nonInvolutory:
+              return {
+                name: fn.name,
+                args: fn.args.concat(),
+                enabled: fn.enabled
+              };
+          }
+        })
         .reverse();
 
       handleChange({ functions });

@@ -28,15 +28,27 @@ const Function = props =>
       )}>
       <div className="horizontal-container">
         <div className="vertical-container">
-          <FunctionSelect
-            value={props.name}
-            groups={FunctionDefinitions.functionGroups}
-            onChange={event => updateFunction({
-              index: props.index,
-              name: event.target.value,
-              args: []
-            })}
-          />
+          <div className="function-options horizontal-container">
+            <input
+              checked={data.enabled}
+              onChange={event => updateFunction({
+                index: props.index,
+                enabled: event.target.checked
+              })}
+              className="action action-disable"
+              type="checkbox"
+            />
+            <FunctionSelect
+              value={props.name}
+              groups={FunctionDefinitions.functionGroups}
+              onChange={event => updateFunction({
+                index: props.index,
+                name: event.target.value,
+                args: [],
+                enabled: data.enabled
+              })}
+            />
+          </div>
           {
             (definition.args?.length > 1)
             && <FunctionParams

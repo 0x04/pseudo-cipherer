@@ -51,7 +51,7 @@ const proceed = (input, functions) =>
     {
       current.error = null;
 
-      if ((errorIndex > -1 && errorIndex < i) || !current.name)
+      if ((errorIndex > -1 && errorIndex < i) || !current.enabled || !current.name)
       {
         current.output = '';
       }
@@ -78,7 +78,7 @@ const proceed = (input, functions) =>
 
 const getSequenceOutput = sequences => sequences
 .reduce(
-  (previous, current) => (current.error === null && current.output)
+  (previous, current) => (current.output.length > 0)
     ? current.output
     : previous,
   ''
