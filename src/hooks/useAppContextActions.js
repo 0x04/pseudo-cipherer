@@ -2,11 +2,10 @@ import { useAppContext } from '../data/AppContext';
 
 import FunctionDefinitions, {functionTypes} from '../data/FunctionDefinitions';
 
-import stringMutilator from '@0x04/string-mutilator';
-
 import {
   buildSequenceString,
   getFunctionOutput,
+  parseCipherString,
   parseSequenceString,
   proceed
 } from '../functions';
@@ -162,6 +161,14 @@ const useAppContextActions = () =>
       let output = getFunctionOutput(functions) || state.input;
 
       setState({ output, functions, sequence });
+    },
+
+    setCipherString(string)
+    {
+      const [ input, sequence ] = parseCipherString(string);
+      const functions = parseSequenceString(sequence);
+
+      handleChange({ input, functions });
     }
   };
 };

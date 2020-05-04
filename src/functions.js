@@ -130,7 +130,7 @@ const parseSequenceString = string =>
       return { name, args, enabled: true };
     });
 
-const decipherCipherString = (string) =>
+const parseCipherString = string =>
 {
   const containsDecipher = /(.*)\u2404([\u0020-\uFFFF]+)$/m;
 
@@ -141,7 +141,12 @@ const decipherCipherString = (string) =>
 
   let [ , input, sequence ] = string.match(containsDecipher);
 
-  sequence = stringMutilator.compressor.unpack(sequence);
+  return [ input, stringMutilator.compressor.unpack(sequence) ];
+}
+
+const decipherCipherString = string =>
+{
+  const [ input, sequence ] = parseCipherString(string);
 
   let functions = parseSequenceString(sequence);
 
@@ -166,6 +171,7 @@ export {
   getFunctionOutput,
   buildSequenceString,
   parseSequenceString,
+  parseCipherString,
   buildCipherString,
   decipherCipherString
 };

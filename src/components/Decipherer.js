@@ -3,10 +3,11 @@ import useAppContextActions from '../hooks/useAppContextActions';
 import { decipherCipherString } from '../functions';
 
 
-const Decipherer = (props) =>
+const Decipherer = ({ onCancelClick }) =>
 {
   const [ value, setValue ] = useState('');
   const [ error, setError ] = useState('');
+  const { setCipherString } = useAppContextActions();
 
   const handleDecipherClick = () =>
   {
@@ -14,12 +15,15 @@ const Decipherer = (props) =>
 
     try
     {
-      setValue(decipherCipherString(value));
+      setCipherString(value);
     }
     catch (e)
     {
       setError(e.message);
+      return;
     }
+
+    onCancelClick && onCancelClick();
   }
 
   return (
@@ -27,7 +31,7 @@ const Decipherer = (props) =>
       <textarea
         className="input"
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={event => setValue(event.target.value)}
       />
       {
         (!!error)
@@ -42,7 +46,7 @@ const Decipherer = (props) =>
         </button>
         <button
           className="action action-cancel"
-          onClick={props.onCancelClick}>
+          onClick={onCancelClick}>
           Cancel
         </button>
       </div>
