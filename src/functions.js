@@ -150,7 +150,7 @@ const decipherCipherString = (string) =>
   return getFunctionOutput(functions);
 }
 
-const createCipherString = (input, sequence) =>
+const buildCipherString = (input, sequence) =>
 {
   if (!input || !sequence)
   {
@@ -166,6 +166,6 @@ export {
   getFunctionOutput,
   buildSequenceString,
   parseSequenceString,
-  createCipherString,
+  buildCipherString,
   decipherCipherString
 };

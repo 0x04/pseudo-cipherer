@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAppContext } from '../data/AppContext';
 import useAppContextActions from '../hooks/useAppContextActions';
-import {createCipherString } from '../functions';
+import {buildCipherString } from '../functions';
 
 import CopyButton from './CopyButton';
 
@@ -18,7 +18,7 @@ const Sequence = ({ showLength = true }) =>
 
   function copyCipheredStringFn(sequence)
   {
-    return createCipherString(state.input, sequence);
+    return buildCipherString(state.input, sequence);
   }
 
   return (
