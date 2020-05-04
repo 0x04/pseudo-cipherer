@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import useAppContextActions from '../hooks/useAppContextActions';
+import { decipherCipherString } from '../functions';
 
 
 const Decipherer = (props) =>
 {
   const [ value, setValue ] = useState('');
   const [ error, setError ] = useState('');
-
-  const { decipherCipherString } = useAppContextActions();
 
   const handleDecipherClick = () =>
   {

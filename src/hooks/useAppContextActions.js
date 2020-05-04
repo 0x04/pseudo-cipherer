@@ -162,36 +162,6 @@ const useAppContextActions = () =>
       let output = getFunctionOutput(functions) || state.input;
 
       setState({ output, functions, sequence });
-    },
-
-    decipherCipherString(string)
-    {
-      const containsDecipher = /(.*)\u2404([\u0020-\uFFFF]+)$/m;
-
-      if (!containsDecipher.test(string))
-      {
-        throw new TypeError(`String doesn't contain a decipher sequence!`);
-      }
-
-      let [ , input, sequence ] = string.match(containsDecipher);
-
-      sequence = stringMutilator.compressor.unpack(sequence);
-
-      let functions = parseSequenceString(sequence);
-
-      proceed(input, functions);
-
-      return getFunctionOutput(functions);
-    },
-
-    createCipherString(input, sequence)
-    {
-      if (!!input || !!sequence)
-      {
-        throw new TypeError('No `input` or `sequence` is given!');
-      }
-
-      return `${input}\u2404${stringMutilator.compressor.pack(sequence)}`;
     }
   };
 };
