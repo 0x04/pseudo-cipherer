@@ -106,7 +106,8 @@ const useAppContextActions = () =>
               // TODO: How to handle arguments?
               return {
                 name: definition.counterFn,
-                args: []
+                args: [],
+                enabled: fn.enabled
               };
 
             case functionTypes.nonInvolutory:
