@@ -18,7 +18,7 @@ const Content = () =>
     <div className="content-component">
       <Input
         id="string-input"
-        label="input"
+        label="Input"
         value={state.input}
         onChange={event => setInputString(event.target.value)}
         onClear={() => setInputString('')}
