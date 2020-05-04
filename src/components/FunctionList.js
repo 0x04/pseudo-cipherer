@@ -32,7 +32,7 @@ const FunctionList = props =>
             index={index}
             name={fn.name}
             onRemoveClick={() => deleteFunction({ index })}
-            onAddClick={() => createFunction({ index: props.index })}
+            onAddClick={() => createFunction({ index: index + 1 })}
           />
         )
       }
