@@ -78,59 +78,62 @@ const proceed = (input, functions) =>
   return functions;
 };
 
-const getSequenceOutput = sequences => sequences
-.reduce(
-  (previous, current) => (current.output.length > 0)
-    ? current.output
-    : previous,
-  ''
-);
-
-const buildSequenceString = sequences => sequences
-  .map(sequence =>
-  {
-    let result = [];
-
-    if (sequence.name && sequence.enabled)
-    {
-      result.push(sequence.name);
-
-      if (sequence.args.length > 0)
-      {
-        result.push(`,${sequence.args.join(',')}`);
-      }
-    }
-
-    return (result.length > 0)
-      ? result.join('')
-      : null;
-  })
-  .filter(value => value !== null)
-  .join('|');
-
-const parseSequenceString = string => string
-  .split(/\s*\|\s*/)
-  .map(value =>
-  {
-    let [ name, ...args ] = value.split(/\s*,\s*/);
-    let defaultArgs = FunctionDefinitions.get(name).args.slice(1);
-
-    if (args.length !== defaultArgs.length)
-    {
-      throw new TypeError(`Wrong number of arguments for '${name}'!`);
-    }
-
-    args = args.map(
-      (value, index) => getRealValue(value, defaultArgs[index].type)
+const getFunctionOutput = functions =>
+  functions
+    .reduce(
+      (previous, current) => (current.output.length > 0)
+        ? current.output
+        : previous,
+      ''
     );
 
-    return { name, args, enabled: true };
-  });
+const buildSequenceString = functions =>
+  functions
+    .map(fn =>
+    {
+      let result = [];
+
+      if (fn.name && fn.enabled)
+      {
+        result.push(fn.name);
+
+        if (fn.args.length > 0)
+        {
+          result.push(`,${fn.args.join(',')}`);
+        }
+      }
+
+      return (result.length > 0)
+        ? result.join('')
+        : null;
+    })
+    .filter(value => value !== null)
+    .join('|');
+
+const parseSequenceString = string =>
+  string
+    .split(/\s*\|\s*/)
+    .map(value =>
+    {
+      let [ name, ...args ] = value.split(/\s*,\s*/);
+      let defaultArgs = FunctionDefinitions.get(name).args.slice(1);
+
+      if (args.length !== defaultArgs.length)
+      {
+        throw new TypeError(`Wrong number of arguments for '${name}'!`);
+      }
+
+      args = args.map(
+        (value, index) => getRealValue(value, defaultArgs[index].type)
+      );
+
+      return { name, args, enabled: true };
+    });
 
 export {
   getRealValue,
   proceed,
-  getSequenceOutput,
+  getFunctionOutput,
   buildSequenceString,
   parseSequenceString
 };

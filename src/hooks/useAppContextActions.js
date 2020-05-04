@@ -6,7 +6,7 @@ import stringMutilator from '@0x04/string-mutilator';
 
 import {
   buildSequenceString,
-  getSequenceOutput,
+  getFunctionOutput,
   parseSequenceString,
   proceed
 } from '../functions';
@@ -25,7 +25,7 @@ const useAppContextActions = () =>
   {
     proceed(input, functions);
 
-    output = output || getSequenceOutput(functions) || input;
+    output = output || getFunctionOutput(functions) || input;
 
     try
     {
@@ -129,7 +129,7 @@ const useAppContextActions = () =>
       if (functions.some(fn => !fn.enabled))
       {
         proceed(output, functions);
-        output = getSequenceOutput(functions);
+        output = getFunctionOutput(functions);
       }
 
       handleChange({ input, output, functions });
@@ -159,7 +159,7 @@ const useAppContextActions = () =>
 
       proceed(state.input, functions);
 
-      let output = getSequenceOutput(functions) || state.input;
+      let output = getFunctionOutput(functions) || state.input;
 
       setState({ output, functions, sequence });
     },
@@ -181,12 +181,17 @@ const useAppContextActions = () =>
 
       proceed(input, functions);
 
-      return getSequenceOutput(functions);
+      return getFunctionOutput(functions);
     },
 
-    createCipherString(input = '', sequenceString = '')
+    createCipherString(input, sequence)
     {
-      return `${input}\u2404${stringMutilator.compressor.pack(sequenceString)}`;
+      if (!!input || !!sequence)
+      {
+        throw new TypeError('No `input` or `sequence` is given!');
+      }
+
+      return `${input}\u2404${stringMutilator.compressor.pack(sequence)}`;
     }
   };
 };
