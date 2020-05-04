@@ -115,13 +115,22 @@ const useAppContextActions = () =>
               return {
                 name: fn.name,
                 args: fn.args.concat(),
-                enabled: fn.enabled
+                enabled: false
               };
           }
         })
         .reverse();
 
-      handleChange({ input: state.output, output: state.input, functions });
+      let output = state.input;
+      let input = state.output;
+
+      if (functions.some(fn => !fn.enabled))
+      {
+        proceed(output, functions);
+        output = getSequenceOutput(functions);
+      }
+
+      handleChange({ input, output, functions });
     },
 
     setInputString(input)
