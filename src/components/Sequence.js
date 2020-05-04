@@ -9,15 +9,28 @@ import CopyButton from './CopyButton';
 
 const Sequence = ({ showLength = true }) =>
 {
-  const [ state ] = useAppContext();
+  const [ state, setState ] = useAppContext();
   const { value, error } = state.sequence;
   const {
     setSequenceString,
     invertFunctions
   } = useAppContextActions();
 
-  function copyCipheredStringFn(sequence)
+  function getCipherString(sequence)
   {
+    if (state.sequence.error || !state.input || !sequence)
+    {
+      const error = (state.sequence.error)
+        ? 'Invalid sequence, please fix first!'
+        : `${(!state.input) ? 'Input' : 'Sequence'} is empty!`;
+
+      setState({ sequence: {
+        ... state.sequence,
+        error
+      }});
+      return;
+    }
+
     return buildCipherString(state.input, sequence);
   }
 
@@ -41,14 +54,14 @@ const Sequence = ({ showLength = true }) =>
             />
         {
           (error)
-            && <div className="error-container">{error}</div>
+          && <div className="error-container">{error}</div>
         }
       </div>
       <CopyButton value={value} />
       <CopyButton
         label="Copy Cipher String"
         value={value}
-        function={copyCipheredStringFn}
+        function={getCipherString}
         className="action-copy-cipher-string"
       />
       <button
