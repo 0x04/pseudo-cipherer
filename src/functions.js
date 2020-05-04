@@ -54,6 +54,7 @@ const proceed = (input, functions) =>
       if ((errorIndex > -1 && errorIndex < i) || !current.enabled || !current.name)
       {
         current.output = '';
+        continue;
       }
       else
       {
@@ -68,6 +69,7 @@ const proceed = (input, functions) =>
       current.output = '';
       current.error = e.message;
       errorIndex = i;
+      continue;
     }
 
     previous = current;
@@ -122,7 +124,7 @@ const parseSequenceString = string => string
       (value, index) => getRealValue(value, defaultArgs[index].type)
     );
 
-    return { name, args };
+    return { name, args, enabled: true };
   });
 
 export {
