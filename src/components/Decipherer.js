@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import useAppContextActions from '../hooks/useAppContextActions';
-import { decipherCipherString } from '../functions';
 
 
 const Decipherer = ({ onCancelClick }) =>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAppContext } from '../data/AppContext';
 import useAppContextActions from '../hooks/useAppContextActions';
-import {buildCipherString } from '../functions';
+import { buildCipherString } from '../functions';
 
 import CopyButton from './CopyButton';
 
@@ -25,7 +25,7 @@ const Sequence = ({ showLength = true }) =>
         : `${(!state.input) ? 'Input' : 'Sequence'} is empty!`;
 
       setState({ sequence: {
-        ... state.sequence,
+        ...state.sequence,
         error
       }});
       return;
