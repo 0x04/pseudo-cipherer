@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { blindText } from '../constants';
+import { getCipherStringFromURL } from '../functions';
 
 import useAppContextActions from '../hooks/useAppContextActions';
 
@@ -9,9 +10,28 @@ import Decipherer from './Decipherer';
 
 const Header = () =>
 {
-  const { setInputString } = useAppContextActions();
+  const { setInputString, setCipherString } = useAppContextActions();
 
   const [ modalVisible, setModalVisible ] = useState(false);
+
+  useEffect(() =>
+    {
+      const cipherString = getCipherStringFromURL(window.location.search);
+
+      if (cipherString && window.confirm('Do you want to load the cipher string from the url?'))
+      {
+        try
+        {
+          setCipherString(cipherString);
+        }
+        catch (e)
+        {
+          alert(`Conversation failed: ${e.message}!`);
+        }
+      }
+    },
+    []
+  );
 
   return (
     <div className="header-component">
@@ -51,5 +71,3 @@ const Header = () =>
 };
 
 export default Header;
-
-

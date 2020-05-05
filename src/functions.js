@@ -165,6 +165,14 @@ const buildCipherString = (input, sequence) =>
   return `${input}\u2404${stringMutilator.compressor.pack(sequence)}`;
 }
 
+const getCipherStringFromURL = (url, query = 'cipher') =>
+{
+  let regexp = new RegExp(`[?&]${query}=([^&]+)$`);
+  return (regexp.test(url))
+    ? decodeURIComponent(url.match(regexp)[1])
+    : null;
+}
+
 export {
   getRealValue,
   proceed,
@@ -173,5 +181,6 @@ export {
   parseSequenceString,
   parseCipherString,
   buildCipherString,
-  decipherCipherString
+  decipherCipherString,
+  getCipherStringFromURL
 };
