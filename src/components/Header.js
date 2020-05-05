@@ -13,9 +13,15 @@ const Header = () =>
   const { setInputString, setCipherString } = useAppContextActions();
 
   const [ modalVisible, setModalVisible ] = useState(false);
+  const [ isURLApplied, setIsURLApplied ] = useState(false);
 
   useEffect(() =>
     {
+      if (isURLApplied)
+      {
+        return;
+      }
+
       const cipherString = getCipherStringFromURL(window.location.search);
 
       if (cipherString && window.confirm('Do you want to load the cipher string from the url?'))
@@ -29,8 +35,10 @@ const Header = () =>
           alert(`Conversation failed: ${e.message}!`);
         }
       }
+
+      setIsURLApplied(true);
     },
-    []
+    [ isURLApplied, setCipherString ]
   );
 
   return (
