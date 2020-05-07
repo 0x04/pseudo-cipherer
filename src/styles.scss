@@ -143,6 +143,7 @@ textarea
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  flex-wrap: wrap;
 
   .spacer
   {
@@ -312,9 +313,14 @@ input[type='submit']
 
   &.collapsed
   {
-    .label .action-link::before
+    .label
     {
-      content: '\2BC8';
+      margin: 0;
+
+      &.action-link::before
+      {
+        content: '\2BC8';
+      }
     }
   }
 
@@ -398,6 +404,20 @@ input[type='submit']
 
       > .output-component.collapsed .label
       {
+        margin: 0;
+      }
+    }
+
+    > .action-container
+    {
+      display: grid;
+      grid-gap: 0.25rem;
+      grid-template-columns: 50% 50%;
+      margin: auto 0 0 0.5rem;
+
+      .action
+      {
+        width: 7rem;
         margin: 0;
       }
     }

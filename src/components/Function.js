@@ -13,7 +13,12 @@ import Output from './Output';
 const Function = props =>
 {
   const [ state ] = useAppContext();
-  const { updateFunction } = useAppContextActions();
+  const {
+    createFunction,
+    updateFunction,
+    deleteFunction,
+    moveFunction
+  } = useAppContextActions();
 
   const data = state.functions[props.index];
   const definition = (FunctionDefinitions.exist(props.name))
@@ -72,13 +77,25 @@ const Function = props =>
         </div>
         <div className="action-container">
           <button
+            className="action action-move-up"
+            disabled={(props.index < 1)}
+            onClick={() => moveFunction(props.index, -1)}>
+            Move Up
+          </button>
+          <button
+            className="action action-move-down"
+            disabled={(props.index >= state.functions.length - 1)}
+            onClick={() => moveFunction(props.index, 1)}>
+            Move Down
+          </button>
+          <button
             className="action action-delete"
-            onClick={props.onRemoveClick}>
+            onClick={() => deleteFunction({ index: props.index })}>
             Remove Function
           </button>
           <button
             className="action action-create"
-            onClick={props.onAddClick}>
+            onClick={() => createFunction({ index: props.index + 1 })}>
             Add Function
           </button>
         </div>

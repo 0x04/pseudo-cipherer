@@ -8,7 +8,7 @@ import useAppContextActions from '../hooks/useAppContextActions';
 const FunctionList = props =>
 {
   const [ state ] = useAppContext();
-  const { clearFunctions, createFunction, deleteFunction } = useAppContextActions();
+  const { clearFunctions, createFunction } = useAppContextActions();
 
   return (
     <div className="function-list-component">
@@ -31,8 +31,6 @@ const FunctionList = props =>
             key={index}
             index={index}
             name={fn.name}
-            onRemoveClick={() => deleteFunction({ index })}
-            onAddClick={() => createFunction({ index: index + 1 })}
           />
         )
       }

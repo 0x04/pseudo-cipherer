@@ -134,6 +134,22 @@ const useAppContextActions = () =>
       handleChange({ input, output, functions });
     },
 
+    moveFunction(index, direction)
+    {
+      if ((index + direction < 0)
+        || (index + direction > state.functions.length - 1))
+      {
+        return;
+      }
+
+      let functions = state.functions.concat();
+      let fn = functions.splice(index, 1);
+
+      functions.splice(index + direction, 0, fn.shift());
+
+      handleChange({ functions });
+    },
+
     setInputString(input)
     {
       handleChange({ input });
