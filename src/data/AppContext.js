@@ -1,30 +1,27 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 
 const AppContext = createContext();
 
-class AppProvider extends React.Component
+const initialState = {
+  input: '',
+  output: '',
+  functions: [],
+  sequence: {
+    value: '',
+    error: null
+  }
+}
+
+const AppProvider = ({ children }) =>
 {
-  state = {
-    input: '',
-    output: '',
-    functions: [],
-    sequence: {
-      value: '',
-      error: null
-    }
-  }
+  let value = useState(initialState);
 
-  render()
-  {
-    let value = [ this.state, this.setState.bind(this) ];
-
-    return (
-      <AppContext.Provider value={value}>
-        {this.props.children}
-      </AppContext.Provider>
-    );
-  }
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+    </AppContext.Provider>
+  );
 }
 
 const useAppContext = () => useContext(AppContext);
