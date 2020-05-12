@@ -122,16 +122,11 @@ const useAppContextActions = () =>
         })
         .reverse();
 
-      let output = state.input;
-      let input = state.output;
-
-      if (functions.some(fn => !fn.enabled))
-      {
-        proceed(output, functions);
-        output = getFunctionOutput(functions);
-      }
-
-      handleChange({ input, output, functions });
+      handleChange({
+        input: state.output,
+        output: state.input,
+        functions
+      });
     },
 
     moveFunction(index, direction)
