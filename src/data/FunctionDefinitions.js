@@ -23,6 +23,48 @@ const functions = [
     ]
   },
   {
+    name: 'charCase.snakeCase',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
+    name: 'charCase.camelCase',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
+    name: 'charCase.kebabCase',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
+    name: 'charCase.dotCase',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
+    name: 'charCase.pascalCase',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
+    name: 'charCase.capitalize',
+    type: functionTypes.nonInvolutory,
+    args: [
+      { name: 'string', type: 'string' }
+    ]
+  },
+  {
     name: 'compressor.pack',
     type: functionTypes.involutoryCounterFn,
     counterFn: 'compressor.unpack',
