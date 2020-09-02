@@ -23,11 +23,15 @@ const Sequence = ({ showLength = true }) =>
       const error = (state.sequence.error)
         ? 'Invalid sequence, please fix first!'
         : `${(!state.input) ? 'Input' : 'Sequence'} is empty!`;
-
-      setState({ sequence: {
-        ...state.sequence,
-        error
-      }});
+      
+      // FIXME: This seems a bit hacky
+      setState(prevState => ({
+        ...prevState,
+        sequence: {
+          ...prevState.sequence,
+          error
+        }
+      }));
       return;
     }
 
