@@ -20,7 +20,7 @@
     "clsx": "^1.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^5.0.1"
   },
   "description": "Demonstration of the `string-mutilator` library.",
   "devDependencies": {
